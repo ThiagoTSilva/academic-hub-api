@@ -38,10 +38,12 @@ public class SemesterService {
             return new SemesterDTO();
         }
 
-        Semester semesterEntity = SemesterMapper.toEntity(semesterDTO);
-        semesterRepository.persist(semesterEntity);
+        existSemester.setSemester(semesterDTO.getSemester());
+        existSemester.setYear(semesterDTO.getYear());
 
-        return SemesterMapper.toDTO(semesterEntity);
+        semesterRepository.persist(existSemester);
+
+        return SemesterMapper.toDTO(existSemester);
     }
 
     public boolean delete(Long id) {
