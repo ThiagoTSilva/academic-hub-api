@@ -3,11 +3,6 @@ package org.academic.application.mappers;
 import org.academic.application.dto.UserDTO;
 import org.keycloak.representations.idm.UserRepresentation;
 
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 public class UserMapper {
 
     public static UserDTO toDTO(UserRepresentation user) {
