@@ -1,9 +1,7 @@
 package org.academic.application.mappers;
 
 import org.academic.application.dto.SemesterDTO;
-import org.academic.application.dto.UserDTO;
 import org.academic.domain.Semester;
-import org.keycloak.representations.idm.UserRepresentation;
 
 public class SemesterMapper {
     public static SemesterDTO toDTO(Semester semester) {
