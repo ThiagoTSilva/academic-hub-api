@@ -4,12 +4,12 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.academic.application.dto.SemesterDTO;
+import org.academic.application.dto.semester.SemesterResponse;
 import org.academic.application.service.SemesterService;
 
 import java.util.List;
 
-@Path("/v1/semesters")
+@Path("/api/v1/semesters")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class SemesterResource {
@@ -22,13 +22,13 @@ public class SemesterResource {
 
     @GET
     @RolesAllowed({"admin", "coordinator"})
-    public List<SemesterDTO> get() {
+    public List<SemesterResponse> get() {
         return semesterService.getAll();
     }
 
     @POST
     @RolesAllowed({"admin", "coordinator"})
-    public Response post(SemesterDTO semester) {
+    public Response post(SemesterResponse semester) {
         semesterService.save(semester);
         return Response.status(Response.Status.CREATED).entity(semester).build();
     }
@@ -36,9 +36,9 @@ public class SemesterResource {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin", "coordinator"})
-    public Response update(@PathParam("id") Long id, SemesterDTO semester) {
+    public Response update(@PathParam("id") Long id, SemesterResponse semester) {
 
-        SemesterDTO updated = semesterService.update(id, semester);
+        SemesterResponse updated = semesterService.update(id, semester);
 
         if (updated == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

@@ -1,7 +1,8 @@
 package org.academic.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.academic.application.dto.SemesterDTO;
+import jakarta.transaction.Transactional;
+import org.academic.application.dto.semester.SemesterResponse;
 import org.academic.application.mappers.SemesterMapper;
 import org.academic.domain.Semester;
 import org.academic.infrastructure.persistence.SemesterRepository;
@@ -18,7 +19,7 @@ public class SemesterService {
         this.semesterRepository = semesterRepository;
     }
 
-    public List<SemesterDTO> getAll() {
+    public List<SemesterResponse> getAll() {
         return semesterRepository
                 .listAll()
                 .stream()
@@ -27,25 +28,28 @@ public class SemesterService {
     }
 
 
-    public void save(SemesterDTO semesterDTO) {
-        semesterRepository.persist(SemesterMapper.toEntity(semesterDTO));
+    @Transactional
+    public void save(SemesterResponse semesterResponse) {
+        semesterRepository.persist(SemesterMapper.toEntity(semesterResponse));
     }
 
-    public SemesterDTO update(Long id, SemesterDTO semesterDTO) {
+    @Transactional
+    public SemesterResponse update(Long id, SemesterResponse semesterResponse) {
         Semester existSemester = semesterRepository.findById(id);
 
         if (existSemester == null) {
-            return new SemesterDTO();
+            return new SemesterResponse();
         }
 
-        existSemester.setSemester(semesterDTO.getSemester());
-        existSemester.setYear(semesterDTO.getYear());
+        existSemester.setSemester(semesterResponse.getSemester());
+        existSemester.setYear(semesterResponse.getYear());
 
         semesterRepository.persist(existSemester);
 
         return SemesterMapper.toDTO(existSemester);
     }
 
+    @Transactional
     public boolean delete(Long id) {
         Semester existing = semesterRepository.findById(id);
         if (existing != null) {

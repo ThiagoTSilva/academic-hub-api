@@ -4,12 +4,12 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.academic.application.dto.DisciplineDTO;
+import org.academic.application.dto.subject.DisciplineResponse;
 import org.academic.application.service.DisciplineService;
 
 import java.util.List;
 
-@Path("/v1/disciplines")
+@Path("/api/v1/disciplines")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class DisciplineResource {
@@ -22,14 +22,14 @@ public class DisciplineResource {
 
     @POST
     @RolesAllowed({"admin", "coordinator"})
-    public Response post(DisciplineDTO disciplineDTO) {
-        DisciplineDTO created = disciplineService.save(disciplineDTO);
+    public Response post(DisciplineResponse disciplineResponse) {
+        DisciplineResponse created = disciplineService.save(disciplineResponse);
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @GET
     @RolesAllowed({"admin", "coordinator"})
-    public List<DisciplineDTO> get() {
+    public List<DisciplineResponse> get() {
         return disciplineService.getAll();
     }
 
@@ -37,8 +37,8 @@ public class DisciplineResource {
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin", "coordinator"})
-    public Response put(@PathParam("id") Long id, DisciplineDTO disciplineDTO) {
-        DisciplineDTO updated = disciplineService.update(id, disciplineDTO);
+    public Response put(@PathParam("id") Long id, DisciplineResponse disciplineResponse) {
+        DisciplineResponse updated = disciplineService.update(id, disciplineResponse);
 
         if (updated == null) {
             return Response.status(Response.Status.NOT_FOUND).build();

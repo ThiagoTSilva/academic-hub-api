@@ -2,7 +2,7 @@ package org.academic.semester;
 
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import org.academic.application.dto.SemesterDTO;
+import org.academic.application.dto.semester.SemesterResponse;
 import org.academic.application.mappers.SemesterMapper;
 import org.academic.domain.Semester;
 import org.academic.infrastructure.persistence.SemesterRepository;
@@ -20,7 +20,7 @@ public class SemesterResourceTest {
 
     @Test
     void testCreateSemester() {
-        SemesterDTO semester = new SemesterDTO();
+        SemesterResponse semester = new SemesterResponse();
         semester.setYear("2025");
         semester.setSemester("1");
 

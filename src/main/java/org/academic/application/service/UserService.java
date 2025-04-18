@@ -3,7 +3,7 @@ package org.academic.application.service;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.ws.rs.WebApplicationException;
 import jakarta.ws.rs.core.Response;
-import org.academic.application.dto.UserDTO;
+import org.academic.application.dto.user.UserResponse;
 import org.academic.application.mappers.UserMapper;
 import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.keycloak.admin.client.Keycloak;
@@ -38,7 +38,7 @@ public class UserService {
                 .build();
     }
 
-    public List<UserDTO> listAll() {
+    public List<UserResponse> listAll() {
         List<UserRepresentation> user = keycloak.realm(targetRealm).users().list();
 
         return user.stream()
@@ -46,21 +46,21 @@ public class UserService {
                 .collect(Collectors.toList());
     }
 
-    public void create(UserDTO userDto) {
+    public void create(UserResponse userResponse) {
         Response response = keycloak.realm(targetRealm)
                 .users()
-                .create(UserMapper.toEntity(userDto));
+                .create(UserMapper.toEntity(userResponse));
 
         if (response.getStatus() != 201) {
             throw new WebApplicationException("Erro ao criar usuário: " + response.getStatusInfo(), response.getStatus());
         }
     }
 
-    public void update(String id, UserDTO userDto) {
+    public void update(String id, UserResponse userResponse) {
 
         UserResource userResource = keycloak.realm(targetRealm).users().get(id);
         UserRepresentation user = userResource.toRepresentation();
-        user.setEmail(userDto.email);
+        user.setEmail(userResponse.email);
         userResource.update(user);
     }
 
@@ -71,11 +71,13 @@ public class UserService {
                 .remove();
     }
 
-    public UserRepresentation getUserById(String id) {
-        return keycloak.realm(targetRealm)
-                .users()
-                .get(id)
-                .toRepresentation();
+    public List<UserResponse> getUserById(String id) {
+        var user = keycloak.realm(targetRealm)
+                    .users()
+                    .get(id)
+                    .toRepresentation();
+
+        return List.of(UserMapper.toDTO(user));
     }
 
 }

@@ -1,9 +1,10 @@
 package org.academic.application.mappers;
 
-import org.academic.application.dto.CourseDTO;
-import org.academic.application.dto.DisciplineDTO;
-import org.academic.application.dto.SemesterCourseDisciplineDTO;
-import org.academic.application.dto.SemesterDTO;
+import org.academic.application.dto.course.CourseResponse;
+import org.academic.application.dto.curriculum.CurriculumRequest;
+import org.academic.application.dto.subject.DisciplineResponse;
+import org.academic.application.dto.curriculum.SemesterCourseDisciplineResponse;
+import org.academic.application.dto.semester.SemesterResponse;
 import org.academic.domain.Course;
 import org.academic.domain.Discipline;
 import org.academic.domain.Semester;
@@ -11,36 +12,36 @@ import org.academic.domain.SemesterCourseDiscipline;
 
 public class SemesterCourseDisciplineMapper {
 
-    public static SemesterCourseDisciplineDTO toDTO(SemesterCourseDiscipline semesterCourseDiscipline,
-                                                    Course course, Semester semester, Discipline discipline) {
+    public static SemesterCourseDisciplineResponse toDTO(SemesterCourseDiscipline semesterCourseDiscipline,
+                                                         Course course, Semester semester, Discipline discipline) {
 
-        CourseDTO courseDTO = new CourseDTO();
-        courseDTO.setId(course.getId());
-        courseDTO.setName(course.getName());
-        courseDTO.setDuration(course.getDuration());
+        CourseResponse courseResponse = new CourseResponse();
+        courseResponse.setId(course.getId());
+        courseResponse.setName(course.getName());
+        courseResponse.setDuration(course.getDuration());
 
-        SemesterDTO semesterDTO = new SemesterDTO();
-        semesterDTO.setId(semester.getId());
-        semesterDTO.setSemester(semester.getSemester());
-        semesterDTO.setYear(semester.getYear());
+        SemesterResponse semesterResponse = new SemesterResponse();
+        semesterResponse.setId(semester.getId());
+        semesterResponse.setSemester(semester.getSemester());
+        semesterResponse.setYear(semester.getYear());
 
-        DisciplineDTO disciplineDTO = new DisciplineDTO();
-        disciplineDTO.setId(discipline.getId());
-        disciplineDTO.setName(discipline.getName());
-        disciplineDTO.setDescription(discipline.getDescription());
-        disciplineDTO.setCode(discipline.getCode());
+        DisciplineResponse disciplineResponse = new DisciplineResponse();
+        disciplineResponse.setId(discipline.getId());
+        disciplineResponse.setName(discipline.getName());
+        disciplineResponse.setDescription(discipline.getDescription());
+        disciplineResponse.setCode(discipline.getCode());
 
-        SemesterCourseDisciplineDTO dto = new SemesterCourseDisciplineDTO();
+        SemesterCourseDisciplineResponse dto = new SemesterCourseDisciplineResponse();
         dto.setId(semesterCourseDiscipline.getId());
-        dto.setCourse(courseDTO);
-        dto.setSemester(semesterDTO);
-        dto.setDiscipline(disciplineDTO);
+        dto.setCourse(courseResponse);
+        dto.setSemester(semesterResponse);
+        dto.setDiscipline(disciplineResponse);
         dto.setCredits(semesterCourseDiscipline.getCredits());
 
         return dto;
     }
 
-    public static SemesterCourseDiscipline toEntity(SemesterCourseDisciplineDTO semesterCourseDisciplineDTO,
+    public static SemesterCourseDiscipline toEntity(CurriculumRequest semesterCourseDisciplineDTO,
                                                     Course course, Semester semester, Discipline discipline){
         SemesterCourseDiscipline semesterCourseDiscipline = new SemesterCourseDiscipline();
         semesterCourseDiscipline.setCourse(course);
@@ -51,28 +52,28 @@ public class SemesterCourseDisciplineMapper {
         return semesterCourseDiscipline;
     }
 
-    public static SemesterCourseDisciplineDTO EntityToDTO(SemesterCourseDiscipline semesterCourseDisciplineDTO){
+    public static SemesterCourseDisciplineResponse EntityToDTO(SemesterCourseDiscipline semesterCourseDisciplineDTO){
 
-        CourseDTO courseDTO = new CourseDTO();
-        courseDTO.setId(semesterCourseDisciplineDTO.getCourse().getId());
-        courseDTO.setName(semesterCourseDisciplineDTO.getCourse().getName());
-        courseDTO.setDuration(semesterCourseDisciplineDTO.getCourse().getDuration());
+        CourseResponse courseResponse = new CourseResponse();
+        courseResponse.setId(semesterCourseDisciplineDTO.getCourse().getId());
+        courseResponse.setName(semesterCourseDisciplineDTO.getCourse().getName());
+        courseResponse.setDuration(semesterCourseDisciplineDTO.getCourse().getDuration());
 
-        SemesterDTO semesterDTO = new SemesterDTO();
-        semesterDTO.setId(semesterCourseDisciplineDTO.getSemester().getId());
-        semesterDTO.setSemester(semesterCourseDisciplineDTO.getSemester().getSemester());
-        semesterDTO.setYear(semesterCourseDisciplineDTO.getSemester().getYear());
+        SemesterResponse semesterResponse = new SemesterResponse();
+        semesterResponse.setId(semesterCourseDisciplineDTO.getSemester().getId());
+        semesterResponse.setSemester(semesterCourseDisciplineDTO.getSemester().getSemester());
+        semesterResponse.setYear(semesterCourseDisciplineDTO.getSemester().getYear());
 
-        DisciplineDTO disciplineDTO = new DisciplineDTO();
-        disciplineDTO.setId(semesterCourseDisciplineDTO.getDiscipline().getId());
-        disciplineDTO.setName(semesterCourseDisciplineDTO.getDiscipline().getName());
-        disciplineDTO.setDescription(semesterCourseDisciplineDTO.getDiscipline().getDescription());
-        disciplineDTO.setCode(semesterCourseDisciplineDTO.getDiscipline().getCode());
+        DisciplineResponse disciplineResponse = new DisciplineResponse();
+        disciplineResponse.setId(semesterCourseDisciplineDTO.getDiscipline().getId());
+        disciplineResponse.setName(semesterCourseDisciplineDTO.getDiscipline().getName());
+        disciplineResponse.setDescription(semesterCourseDisciplineDTO.getDiscipline().getDescription());
+        disciplineResponse.setCode(semesterCourseDisciplineDTO.getDiscipline().getCode());
 
-        SemesterCourseDisciplineDTO semesterCourseDiscipline = new SemesterCourseDisciplineDTO();
-        semesterCourseDiscipline.setCourse(courseDTO);
-        semesterCourseDiscipline.setSemester(semesterDTO);
-        semesterCourseDiscipline.setDiscipline(disciplineDTO);
+        SemesterCourseDisciplineResponse semesterCourseDiscipline = new SemesterCourseDisciplineResponse();
+        semesterCourseDiscipline.setCourse(courseResponse);
+        semesterCourseDiscipline.setSemester(semesterResponse);
+        semesterCourseDiscipline.setDiscipline(disciplineResponse);
         semesterCourseDiscipline.setCredits(semesterCourseDisciplineDTO.getCredits());
 
         return semesterCourseDiscipline;

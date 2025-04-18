@@ -2,7 +2,7 @@ package org.academic.discipline;
 
 import io.quarkus.test.InjectMock;
 import io.quarkus.test.junit.QuarkusTest;
-import org.academic.application.dto.DisciplineDTO;
+import org.academic.application.dto.subject.DisciplineResponse;
 import org.academic.application.mappers.DisciplineMapper;
 import org.academic.domain.Discipline;
 import org.academic.infrastructure.persistence.DisciplineRepository;
@@ -20,7 +20,7 @@ public class DisciplineResourceTest {
 
     @Test
     void testCreateDiscipline() {
-        DisciplineDTO discipline = new DisciplineDTO();
+        DisciplineResponse discipline = new DisciplineResponse();
         discipline.setName("Matemática");
         discipline.setCode("001");
 

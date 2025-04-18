@@ -2,6 +2,7 @@ package org.academic.domain;
 
 import jakarta.persistence.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Entity
@@ -12,6 +13,8 @@ public class Course {
     private Long id;
     private String name;
     private Integer duration;
+    @Column(name = "created_at")
+    private LocalDateTime createdAt;
 
     @OneToMany(mappedBy = "course", cascade = CascadeType.ALL)
     private List<SemesterCourseDiscipline> semesterCourseDisciplines;
@@ -40,5 +43,12 @@ public class Course {
         this.duration = duration;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 
 }

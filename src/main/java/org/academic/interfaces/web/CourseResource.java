@@ -5,12 +5,13 @@ import jakarta.annotation.security.RolesAllowed;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
-import org.academic.application.dto.CourseDTO;
+import org.academic.application.dto.course.CourseResponse;
+import org.academic.application.dto.course.CourseResquest;
 import org.academic.application.service.CourseService;
 
 import java.util.List;
 
-@Path("/v1/courses")
+@Path("/api/v1/courses")
 @Produces(MediaType.APPLICATION_JSON)
 @Consumes(MediaType.APPLICATION_JSON)
 public class CourseResource {
@@ -23,33 +24,33 @@ public class CourseResource {
 
     @POST
     @RolesAllowed({"admin", "coordinator"})
-    public Response post(CourseDTO curso) {
-        CourseDTO created = courseService.create(curso);
+    public Response post(CourseResquest curso) {
+        CourseResponse created = courseService.create(curso);
         return Response.status(Response.Status.CREATED).entity(created).build();
     }
 
     @GET
     @RolesAllowed({"admin", "coordinator"})
-    public List<CourseDTO> get() {
+    public List<CourseResponse> get() {
         return courseService.getAllCursos();
     }
 
     @GET
     @Path("/{id}")
     @RolesAllowed({"admin", "coordinator"})
-    public Response getCursoById(@PathParam("id") Long id) {
-        CourseDTO curso = courseService.getCursoById(id);
-        if (curso == null) {
+    public Response getCourseById(@PathParam("id") Long id) {
+        List<CourseResponse> course = courseService.getCursoById(id);
+        if (course == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
-        return Response.ok(curso).build();
+        return Response.ok(course).build();
     }
 
     @PUT
     @Path("/{id}")
     @RolesAllowed({"admin", "coordinator"})
-    public Response updateCurso(@PathParam("id") Long id, CourseDTO curso) {
-        CourseDTO updated = courseService.update(id, curso);
+    public Response updateCourse(@PathParam("id") Long id, CourseResquest curso) {
+        CourseResponse updated = courseService.update(id, curso);
         if (updated == null) {
             return Response.status(Response.Status.NOT_FOUND).build();
         }
@@ -59,7 +60,7 @@ public class CourseResource {
     @DELETE
     @Path("/{id}")
     @RolesAllowed({"admin", "coordinator"})
-    public Response deleteCurso(@PathParam("id") Long id) {
+    public Response deleteCourse(@PathParam("id") Long id) {
         boolean deleted = courseService.delete(id);
         if (!deleted) {
             return Response.status(Response.Status.NOT_FOUND).build();

@@ -1,14 +1,15 @@
 package org.academic.application.mappers;
 
-import org.academic.application.dto.CourseDTO;
-import org.academic.application.dto.SemesterDTO;
+import org.academic.application.dto.course.CourseResponse;
+import org.academic.application.dto.course.CourseResquest;
 import org.academic.domain.Course;
-import org.academic.domain.Semester;
+
+import java.time.LocalDateTime;
 
 public class CourseMapper {
 
-    public static CourseDTO toDTO(Course course) {
-        CourseDTO dto = new CourseDTO();
+    public static CourseResponse toDTO(Course course) {
+        CourseResponse dto = new CourseResponse();
         dto.setId(course.getId());
         dto.setName(course.getName());
         dto.setDuration(course.getDuration());
@@ -16,11 +17,11 @@ public class CourseMapper {
         return dto;
     }
 
-    public static Course toEntity(CourseDTO courseDTO){
+    public static Course toEntity(CourseResquest courseResponse){
         Course course = new Course();
-        course.setId(courseDTO.getId());
-        course.setName(courseDTO.getName());
-        course.setDuration(courseDTO.getDuration());
+        course.setName(courseResponse.getName());
+        course.setDuration(courseResponse.getDuration());
+        course.setCreatedAt(LocalDateTime.now());
         return course;
     }
 }

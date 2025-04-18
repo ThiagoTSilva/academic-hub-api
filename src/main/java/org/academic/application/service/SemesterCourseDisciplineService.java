@@ -1,11 +1,13 @@
 package org.academic.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.NotFoundException;
-import org.academic.application.dto.CourseDTO;
-import org.academic.application.dto.DisciplineDTO;
-import org.academic.application.dto.SemesterCourseDisciplineDTO;
-import org.academic.application.dto.SemesterDTO;
+import org.academic.application.dto.course.CourseResponse;
+import org.academic.application.dto.curriculum.CurriculumRequest;
+import org.academic.application.dto.subject.DisciplineResponse;
+import org.academic.application.dto.curriculum.SemesterCourseDisciplineResponse;
+import org.academic.application.dto.semester.SemesterResponse;
 import org.academic.application.mappers.CourseMapper;
 import org.academic.application.mappers.DisciplineMapper;
 import org.academic.application.mappers.SemesterCourseDisciplineMapper;
@@ -21,7 +23,6 @@ import org.academic.infrastructure.persistence.SemesterRepository;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @ApplicationScoped
 public class SemesterCourseDisciplineService {
@@ -41,32 +42,37 @@ public class SemesterCourseDisciplineService {
         this.disciplineRepository = disciplineRepository;
     }
 
-    public SemesterCourseDisciplineDTO associateDiscipline(SemesterCourseDisciplineDTO semesterCourseDisciplineDTO){
-        Course course = courseRepository.findById(semesterCourseDisciplineDTO.getCourse().getId());
-        Semester semester = semesterRepository.findById(semesterCourseDisciplineDTO.getSemester().getId());
-        Discipline discipline = disciplineRepository.findById(semesterCourseDisciplineDTO.getDiscipline().getId());
+    @Transactional
+    public SemesterCourseDisciplineResponse associateDiscipline(CurriculumRequest cirriculum){
+        long courseId = cirriculum.getCourseId();
+        long semesterId  = cirriculum.getSemesterId();
+        long subjectId = cirriculum.getSubjectId();
+
+        Course course = courseRepository.findById(courseId);
+        Semester semester = semesterRepository.findById(semesterId);
+        Discipline discipline = disciplineRepository.findById(subjectId);
 
         if (course == null || semester == null || discipline == null) {
-            return new SemesterCourseDisciplineDTO();
+            return new SemesterCourseDisciplineResponse();
         }
 
-        semesterCourseDisciplineRepository.persist(SemesterCourseDisciplineMapper.toEntity(semesterCourseDisciplineDTO, course, semester,discipline));
+        semesterCourseDisciplineRepository.persist(SemesterCourseDisciplineMapper.toEntity(cirriculum, course, semester,discipline));
 
         SemesterCourseDiscipline SemesterCourseDisciplineEntity = semesterCourseDisciplineRepository.findAll().stream()
-                .filter(scd -> scd.getCourse().getId().equals(semesterCourseDisciplineDTO.getCourse().getId()))
-                .filter(scd -> scd.getSemester().getId().equals(semesterCourseDisciplineDTO.getSemester().getId()))
-                .filter(scd -> scd.getDiscipline().getId().equals(semesterCourseDisciplineDTO.getDiscipline().getId()))
+                .filter(scd -> scd.getCourse().getId().equals(courseId))
+                .filter(scd -> scd.getSemester().getId().equals(semesterId))
+                .filter(scd -> scd.getDiscipline().getId().equals(subjectId))
                 .findFirst()
                 .orElseThrow(() -> new NotFoundException("Combination not found"));
 
-        CourseDTO courseDTO = CourseMapper.toDTO(course);
-        SemesterDTO semesterDTO = SemesterMapper.toDTO(semester);
-        DisciplineDTO disciplineDTO = DisciplineMapper.toDTO(discipline);
+        CourseResponse courseResponse = CourseMapper.toDTO(course);
+        SemesterResponse semesterResponse = SemesterMapper.toDTO(semester);
+        DisciplineResponse disciplineResponse = DisciplineMapper.toDTO(discipline);
 
         return SemesterCourseDisciplineMapper.toDTO(SemesterCourseDisciplineEntity, course, semester, discipline);
     }
 
-    public List<SemesterCourseDisciplineDTO> viewCurriculumMatrix(Long id) {
+    public List<SemesterCourseDisciplineResponse> viewCurriculumMatrix(Long id) {
 
         Course course = courseRepository.findById(id);
 

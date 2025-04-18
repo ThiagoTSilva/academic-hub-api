@@ -1,6 +1,6 @@
-package org.academic.application.dto;
+package org.academic.application.dto.subject;
 
-public class DisciplineDTO {
+public class DisciplineResponse {
 
     private Long id;
     private String name;

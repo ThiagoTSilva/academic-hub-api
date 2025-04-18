@@ -1,11 +1,14 @@
 package org.academic.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.academic.application.dto.CourseDTO;
+import jakarta.transaction.Transactional;
+import org.academic.application.dto.course.CourseResponse;
+import org.academic.application.dto.course.CourseResquest;
 import org.academic.application.mappers.CourseMapper;
 import org.academic.domain.Course;
 import org.academic.infrastructure.persistence.CourseRepository;
 
+import java.util.Comparator;
 import java.util.List;
 
 @ApplicationScoped
@@ -17,12 +20,19 @@ public class CourseService {
         this.courseRepository = courseRepository;
     }
 
-    public CourseDTO create(CourseDTO courseDTO) {
-        courseRepository.persist(CourseMapper.toEntity(courseDTO));
-        return courseDTO;
+    @Transactional
+    public CourseResponse create(CourseResquest courseResquest) {
+        courseRepository.persist(CourseMapper.toEntity(courseResquest));
+
+        return courseRepository
+                .listAll()
+                .stream()
+                .max(Comparator.comparing(Course::getCreatedAt))
+                .map(CourseMapper::toDTO)
+                .orElse(null);
     }
 
-    public List<CourseDTO> getAllCursos() {
+    public List<CourseResponse> getAllCursos() {
         return courseRepository
                 .listAll()
                 .stream()
@@ -30,22 +40,25 @@ public class CourseService {
                 .toList();
     }
 
-    public CourseDTO getCursoById(Long id) {
-        return CourseMapper.toDTO(courseRepository.findById(id));
+    public List<CourseResponse> getCursoById(Long id) {
+        return List.of(CourseMapper.toDTO(courseRepository.findById(id)));
     }
 
-    public CourseDTO update(Long id, CourseDTO courseDTO) {
-        Course existsCourse = courseRepository.findById(id);
-        if (existsCourse == null) return new CourseDTO();
 
-        existsCourse.setDuration(courseDTO.getDuration());
-        existsCourse.setName(courseDTO.getName());
+    @Transactional
+    public CourseResponse update(Long id, CourseResquest request) {
+        Course existsCourse = courseRepository.findById(id);
+        if (existsCourse == null) return new CourseResponse();
+
+        existsCourse.setDuration(request.getDuration());
+        existsCourse.setName(request.getName());
 
         courseRepository.persist(existsCourse);
 
         return CourseMapper.toDTO(existsCourse);
     }
 
+    @Transactional
     public boolean delete(Long id) {
         Course existing = courseRepository.findById(id);
         if (existing != null) {

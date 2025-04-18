@@ -1,22 +1,13 @@
-package org.academic.application.dto;
-
+package org.academic.application.dto.user;
 
 import java.util.List;
-import java.util.Map;
 
-public class UserDTO {
-    public String id;
+public class UserRequest {
+
     public String username;
     public String email;
     public List<String> role;
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public String getUsername() {
         return username;

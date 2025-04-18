@@ -1,18 +1,9 @@
-package org.academic.application.dto;
+package org.academic.application.dto.semester;
 
-public class SemesterDTO {
+public class semesterRequest {
 
-    private Long id;
     private String year;
     private String semester;
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getYear() {
         return year;
@@ -30,3 +21,4 @@ public class SemesterDTO {
         this.semester = semester;
     }
 }
+

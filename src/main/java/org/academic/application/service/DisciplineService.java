@@ -1,7 +1,8 @@
 package org.academic.application.service;
 
 import jakarta.enterprise.context.ApplicationScoped;
-import org.academic.application.dto.DisciplineDTO;
+import jakarta.transaction.Transactional;
+import org.academic.application.dto.subject.DisciplineResponse;
 import org.academic.application.mappers.DisciplineMapper;
 import org.academic.domain.Discipline;
 import org.academic.infrastructure.persistence.DisciplineRepository;
@@ -17,7 +18,7 @@ public class DisciplineService {
         disciplineRepository = disciplineRepository;
     }
 
-    public List<DisciplineDTO> getAll(){
+    public List<DisciplineResponse> getAll(){
         return disciplineRepository
                 .listAll()
                 .stream()
@@ -25,26 +26,29 @@ public class DisciplineService {
                 .toList();
     }
 
-    public DisciplineDTO save(DisciplineDTO disciplineDTO){
-        disciplineRepository.persist(DisciplineMapper.toEntity(disciplineDTO));
-        return disciplineDTO;
+    @Transactional
+    public DisciplineResponse save(DisciplineResponse disciplineResponse){
+        disciplineRepository.persist(DisciplineMapper.toEntity(disciplineResponse));
+        return disciplineResponse;
     }
 
-    public DisciplineDTO update(Long id, DisciplineDTO disciplineDTO){
+    @Transactional
+    public DisciplineResponse update(Long id, DisciplineResponse disciplineResponse){
         Discipline existsDiscipline = disciplineRepository.findById(id);
         if (existsDiscipline == null) {
-            return new DisciplineDTO();
+            return new DisciplineResponse();
         }
 
-        existsDiscipline.setName(disciplineDTO.getName());
-        existsDiscipline.setDescription(disciplineDTO.getDescription());
-        existsDiscipline.setCode(disciplineDTO.getCode());
+        existsDiscipline.setName(disciplineResponse.getName());
+        existsDiscipline.setDescription(disciplineResponse.getDescription());
+        existsDiscipline.setCode(disciplineResponse.getCode());
 
         disciplineRepository.persist(existsDiscipline);
 
         return DisciplineMapper.toDTO(existsDiscipline);
     }
 
+    @Transactional
     public boolean delete(Long id){
         Discipline discipline = disciplineRepository.findById(id);
         if (discipline != null) {
