@@ -1,6 +1,7 @@
 package org.academic.interfaces.web;
 
 import jakarta.annotation.security.RolesAllowed;
+import jakarta.inject.Inject;
 import jakarta.ws.rs.*;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -16,6 +17,7 @@ public class DisciplineResource {
 
     private DisciplineService disciplineService;
 
+    @Inject
     public DisciplineResource(DisciplineService disciplineService){
         disciplineService = disciplineService;
     }
